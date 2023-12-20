@@ -1,0 +1,82 @@
+swagger: '2.0'
+info:
+  title: "API de Gerenciamento de Salas"
+  description: "API para adicionar salas"
+  version: "1.0"
+host: "localhost:5000"
+basePath: "/"
+schemes:
+  - "http"
+paths:
+    /adicionar-sala:
+    post:
+      tags:
+        - Sala
+      summary: Registar uma nova sala. O token JWT correspondente deve ter um campo 'claims' do tipo 'tecnico'.
+      operationId: addSala
+      requestBody:
+        description: Informação da sala a registar
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nome:
+                  type: string
+                  description: Nome da sala
+                capacidade:
+                  type: string
+                  description: Capacidade da Sala
+              example:
+                nome: CP1_0.08
+                capacidade: 30
+      responses:
+        '200':
+          description: Sala registada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  usertype:
+                    type: integer
+                    description: Número da sala
+              example:
+                idSala: 1
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+              example:
+                message: Invalid request payload
+        '401':
+           $ref: '#/components/responses/UnauthorizedError'     
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+              example:
+                message: An unexpected error occurred
+definitions:
+  Sala:
+    type: object
+    properties:
+      nome:
+        type: string
+        example: "Sala A"
+      capacidade:
+        type: integer
+        example: 30
